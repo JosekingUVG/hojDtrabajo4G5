@@ -3,9 +3,9 @@ package uvg;
 public class StackList<E> implements Stack<E> {
     private List<E> list;
 
-    public StackList(String type) {
-        ListFactory factory = new ListFactory();
-        this.list = factory.getList(type); // El tipo genérico se maneja dentro de la fábrica
+    // Constructor que recibe una lista generada por ListFactory
+    public StackList(List<E> list) {
+        this.list = list;
     }
 
     @Override
