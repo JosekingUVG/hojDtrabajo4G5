@@ -2,28 +2,30 @@ package uvg;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== Prueba de Listas Enlazadas ===");
-        
-        // Prueba con la lista simplemente enlazada
-        System.out.println("\n📌 Probando SinglyLinkedList:");
-        List<Integer> singlyList = new SinglyLinkedList<>();
-        singlyList.addFirst(10);
-        singlyList.addLast(20);
-        singlyList.addLast(30);
-        System.out.println("Primer elemento: " + singlyList.getFirst()); // 10
-        System.out.println("Último elemento: " + singlyList.getLast());  // 30
-        System.out.println("Eliminando primero: " + singlyList.removeFirst()); // 10
-        System.out.println("Nuevo primer elemento: " + singlyList.getFirst());  // 20
-        
-        // Prueba con la lista doblemente enlazada
-        System.out.println("\n📌 Probando DoublyLinkedList:");
-        List<String> doublyList = new DoublyLinkedList<>();
-        doublyList.addFirst("Hola");
-        doublyList.addLast("Mundo");
-        doublyList.addLast("!");
-        System.out.println("Primer elemento: " + doublyList.getFirst()); // Hola
-        System.out.println("Último elemento: " + doublyList.getLast());  // !
-        System.out.println("Eliminando último: " + doublyList.removeLast()); // !
-        System.out.println("Nuevo último elemento: " + doublyList.getLast());  // Mundo
+        // Probar con una lista simplemente enlazada (SinglyLinkedList)
+        System.out.println("Probando StackList con SinglyLinkedList:");
+        StackList<Integer> stackSingly = new StackList<>("Singly");
+
+        stackSingly.push(10);
+        stackSingly.push(20);
+        stackSingly.push(30);
+        System.out.println("Peek: " + stackSingly.peek()); // Esperado: 30
+        System.out.println("Tamaño: " + stackSingly.size()); // Esperado: 3
+        System.out.println("Pop: " + stackSingly.pop()); // Esperado: 30
+        System.out.println("Tamaño después de pop: " + stackSingly.size()); // Esperado: 2
+        System.out.println("Vacío: " + stackSingly.empty()); // Esperado: false
+
+        // Probar con una lista doblemente enlazada (DoublyLinkedList)
+        System.out.println("\nProbando StackList con DoublyLinkedList:");
+        StackList<Integer> stackDoubly = new StackList<>("Doubly");
+
+        stackDoubly.push(100);
+        stackDoubly.push(200);
+        stackDoubly.push(300);
+        System.out.println("Peek: " + stackDoubly.peek()); // Esperado: 300
+        System.out.println("Tamaño: " + stackDoubly.size()); // Esperado: 3
+        System.out.println("Pop: " + stackDoubly.pop()); // Esperado: 300
+        System.out.println("Tamaño después de pop: " + stackDoubly.size()); // Esperado: 2
+        System.out.println("Vacío: " + stackDoubly.empty()); // Esperado: false
     }
 }
