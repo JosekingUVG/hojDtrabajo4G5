@@ -21,4 +21,20 @@ public abstract class AbstractList<E> implements List<E> {
     public void clear() {
         count = 0;
     }
+    
+    @Override
+    public void add(E value) {
+        addLast(value);
+    }
+
+    @Override
+    public E remove() {
+        return removeLast();
+    }
+
+    @Override
+    public E get() {
+        return getLast();
+    }
+
 }
