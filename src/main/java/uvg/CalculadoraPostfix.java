@@ -1,34 +1,38 @@
 package uvg;
 
 public class CalculadoraPostfix {
-    private static CalculadoraPostfix instancia; //esto hace una instancia única 
+    private static CalculadoraPostfix instancia; // Instancia única
     private Stack<Integer> md; 
 
-    private CalculadoraPostfix() { //constructor privado
-        this.md = new StackVector<>();
+    private CalculadoraPostfix(String stackType, String listType) { 
+        this.md = StackFactory.getStack(stackType, listType); 
     }
-    // Método estático para obtener la única instancia o crearla si no existe
-    // ahora ya se deberá de utilizar este método en lugar de crearlo de la forma tradicional
-    //ejemplo: CalculadoraPostfix calculadora = CalculadoraPostfix.getInstance();
-    //int resultado = calculadora.evaluarExpresion("3 4 + 2 *"); 
-    public static CalculadoraPostfix getInstance() {
+
+    // Método para obtener la instancia con el tipo de stack deseado
+    public static CalculadoraPostfix getInstance(String stackType, String listType) {
         if (instancia == null) {
-            instancia = new CalculadoraPostfix();
+            instancia = new CalculadoraPostfix(stackType, listType);
         }
         return instancia;
     }
 
     public int evaluarExpresion(String expresion) throws IllegalArgumentException, ArithmeticException {
+        System.out.println("Evaluando expresión postfix: " + expresion);
         String[] tokens = expresion.split(" ");
         for (String token : tokens) {
+            System.out.println("Procesando token: " + token);
             if (esNumero(token)) {
-                md.push(Integer.parseInt(token));
+                int num = Integer.parseInt(token);
+                System.out.println("  Es número: " + num);
+                md.push(num);
             } else if (esOperador(token)) {
+                System.out.println("  Es operador: " + token);
                 procesarOperador(token);
             } else {
                 throw new IllegalArgumentException("Token inválido: " + token);
             }
         }
+
         if (md.size() != 1) {
             throw new IllegalStateException("Expresión inválida, elementos sobrantes");
         }
@@ -49,11 +53,14 @@ public class CalculadoraPostfix {
     }
 
     private void procesarOperador(String operador) {
+        System.out.println("Procesando operador: " + operador);
         if (md.size() < 2) {
             throw new IllegalStateException("No hay suficientes operandos en la pila");
         }
         int b = md.pop();
         int a = md.pop();
+        System.out.println("  Operandos: " + a + " " + operador + " " + b);
+
         
         switch (operador) {
             case "+":
@@ -67,7 +74,7 @@ public class CalculadoraPostfix {
                 break;
             case "/":
                 if (b == 0) {
-                    throw new ArithmeticException("División por cero"); // Aseguramos que se lance la excepción
+                    throw new ArithmeticException("División por cero");
                 }
                 md.push(a / b);
                 break;
@@ -75,5 +82,4 @@ public class CalculadoraPostfix {
                 throw new IllegalArgumentException("Operador desconocido: " + operador);
         }
     }
-
 }

@@ -7,17 +7,17 @@ import uvg.CalculadoraPostfix;
 
 public class CalculadoraPostfixTest {
 
-    private CalculadoraPostfix calculadora = CalculadoraPostfix.getInstance();
+    private CalculadoraPostfix calculadora = CalculadoraPostfix.getInstance(null, null);
 
     @BeforeEach
     void setUp() {
         // Obtenemos la única instancia del Singleton antes de cada prueba
-        calculadora = CalculadoraPostfix.getInstance();
+        calculadora = CalculadoraPostfix.getInstance(null, null);
     }
 
     @Test
     void testSingletonUnicaInstancia() {
-        CalculadoraPostfix otraCalculadora = CalculadoraPostfix.getInstance();
+        CalculadoraPostfix otraCalculadora = CalculadoraPostfix.getInstance(null, null);
         assertSame(calculadora, otraCalculadora, "Ambas instancias deben ser la misma");
     }
 

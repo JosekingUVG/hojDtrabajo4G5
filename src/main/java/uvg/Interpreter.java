@@ -1,89 +1,107 @@
 package uvg;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class Interpreter {
 
-    public static void main(String[] args) {
-        String filePath = "lista.txt"; 
-        List<String> postfixExpressions = InfixtoPosfix(filePath);
-
-        for (String postfix : postfixExpressions) {
-            System.out.println(postfix);
-        }
-    }
-
-
-    public static List<String> InfixtoPosfix(String filePath) {
-        List<String> postfixExpressions = new ArrayList<>();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Convert infix to postfix
-                String postfix = infixToPostfix(line.trim());
-                postfixExpressions.add(postfix);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return postfixExpressions;
-    }
-
-
+    // Método para convertir una expresión infix a postfix
     public static String infixToPostfix(String infix) {
+        System.out.println("Convirtiendo infix: " + infix);
         StringBuilder postfix = new StringBuilder();
         Stack<Character> stack = new Stack<>();
 
+
         for (int i = 0; i < infix.length(); i++) {
             char ch = infix.charAt(i);
-
-            if (Character.isLetterOrDigit(ch)) {
-                postfix.append(ch);
+            
+            // Ignorar espacios en blanco
+            if (Character.isWhitespace(ch)) {
+                continue;
             }
+
+            // Si es un operando (número o letra)
+            if (Character.isLetterOrDigit(ch)) {
+                postfix.append(ch).append(" ");
+            }
+
+            // Si es un paréntesis de apertura
             else if (ch == '(') {
                 stack.push(ch);
-            }
+            } 
+            // Si es un paréntesis de cierre
             else if (ch == ')') {
                 while (!stack.isEmpty() && stack.peek() != '(') {
-                    postfix.append(stack.pop());
+                    postfix.append(stack.pop()).append(" ");
                 }
-                stack.pop(); 
-            }
- 
+                stack.pop(); // Eliminar '('
+            } 
+            // Si es un operador
             else {
                 while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(ch)) {
-                    postfix.append(stack.pop());
+                    postfix.append(stack.pop()).append(" ");
                 }
                 stack.push(ch);
             }
         }
 
+        // Vaciar la pila restante
         while (!stack.isEmpty()) {
-            postfix.append(stack.pop());
+            postfix.append(stack.pop()).append(" ");
         }
 
-        return postfix.toString();
+        String result = postfix.toString().trim();
+        System.out.println("Resultado postfix: " + result);
+        return result;
+
     }
 
-    private static int precedence(char operator) {
-        switch (operator) {
-            case '+':
-            case '-':
+    // Método para obtener la precedencia de los operadores
+    private static int precedence(char op) {
+        switch (op) {
+            case '+': case '-':
                 return 1;
-            case '*':
-            case '/':
+            case '*': case '/':
                 return 2;
             case '^':
                 return 3;
             default:
-                return -1; 
+                return 0;
         }
+    }
+
+    // Método para leer expresiones desde un archivo con ruta absoluta dinámica
+    public static List<String> readFile(String filePath) {
+        List<String> expressions = new ArrayList<>();
+        
+        // Obtener la ruta absoluta
+        File file = new File(filePath);
+        String absolutePath = file.getAbsolutePath();
+        System.out.println("Buscando archivo en: " + absolutePath);
+
+        if (!file.exists()) {
+            System.out.println("Error: No se encontró el archivo en " + absolutePath);
+            return expressions; // Retorna lista vacía
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                expressions.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Imprimir contenido del archivo para depuración
+        System.out.println("Contenido del archivo:");
+        for (String line : expressions) {
+            System.out.println(line);
+        }
+
+        return expressions;
     }
 }

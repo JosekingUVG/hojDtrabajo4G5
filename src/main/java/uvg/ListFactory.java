@@ -1,13 +1,13 @@
 package uvg;
 
 public class ListFactory {
-    public static List getList(String type) {
-        if (type.equalsIgnoreCase("SinglyLinkedList")) {
-            return new SinglyLinkedList();
-        } else if (type.equalsIgnoreCase("DoublyLinkedList")) {
-            return new DoublyLinkedList();
+    public static List<Integer> getList(String type) {
+        if (type.equalsIgnoreCase("simple")) {
+            return new SinglyLinkedList<>();
+        } else if (type.equalsIgnoreCase("doble")) {
+            return new DoublyLinkedList<>();
+        } else {
+            throw new IllegalArgumentException("Tipo de lista no válido: " + type);
         }
-                return null; 
     }
 }
-
